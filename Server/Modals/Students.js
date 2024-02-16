@@ -50,6 +50,9 @@ const studentSchema = new mongoose.Schema({
   mobile: {
     type: Number,
   },
+  profileImage : {
+    type : String,
+  }
 });
 
 const StudentCollection = new mongoose.model("students", studentSchema);

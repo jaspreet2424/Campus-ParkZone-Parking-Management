@@ -8,6 +8,15 @@ import {
   UPLOAD_DETAIL_REQUEST,
   UPLOAD_DETAIL_SUCCESS,
   UPLOAD_DETAIL_FAILURE,
+  LOGIN_USER_REQUEST,
+  LOGIN_USER_SUCCESS,
+  LOGIN_USER_FAILURE,
+  CHECK_USER_AUTH_REQUEST,
+  CHECK_USER_AUTH_FAILURE,
+  CHECK_USER_AUTH_SUCCESS,
+  LOGOUT_USER_REQUEST,
+  LOGOUT_USER_SUCCESS,
+  LOGOUT_USER_FAILURE,
 } from "../Constants/Student";
 import axios from "axios";
 axios.defaults.baseURL = "http://localhost:8000";
@@ -56,13 +65,69 @@ const uploadDetails = (formData, navigate) => async (dispatch) => {
     const response = await axios.post("/api/upload-details", formData);
     if (response.data.success) {
       dispatch({ type: UPLOAD_DETAIL_SUCCESS, payload: response.data.User });
-      navigate("/");
+      navigate("/sign-in");
     } else {
       dispatch({ type: UPLOAD_DETAIL_FAILURE, payload: response.data.message });
     }
   } catch (error) {
-    dispatch({ type: UPLOAD_DETAIL_FAILURE, payload: error.response.data.message });
+    dispatch({
+      type: UPLOAD_DETAIL_FAILURE,
+      payload: error.response.data.message,
+    });
   }
 };
 
-export { registerNewUser, verifyUserOTP , uploadDetails };
+const loginUserFunction = (formData, navigate) => async (dispatch) => {
+  dispatch({ type: LOGIN_USER_REQUEST });
+  try {
+    const response = await axios.post("/api/sign-in", formData);
+    if (response.data.success) {
+      dispatch({ type: LOGIN_USER_SUCCESS, payload: response.data.User });
+      navigate("/");
+    } else {
+      dispatch({ type: LOGIN_USER_FAILURE, payload: response.data.message });
+    }
+  } catch (error) {
+    dispatch({
+      type: LOGIN_USER_FAILURE,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+const checkStudentAuthentication = () => async (dispatch) => {
+  try {
+    const response = await axios.get("/api/student-auth");
+    if (response.data.success) {
+      dispatch({ type: CHECK_USER_AUTH_SUCCESS, payload: response.data.User });
+    } else {
+      dispatch({
+        type: CHECK_USER_AUTH_FAILURE,
+        payload: response.data.message,
+      });
+    }
+  } catch (error) {
+    dispatch({
+      type: CHECK_USER_AUTH_FAILURE,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+const logoutUser = (navigate) => async(dispatch) =>{
+  dispatch({type : LOGOUT_USER_REQUEST});
+  try {
+    const response = await axios.get('/api/sign-out');
+    if(response.data.success){
+      dispatch({type : LOGOUT_USER_SUCCESS , payload : response.data.message});
+      navigate('/');
+    }else{
+      dispatch({type : LOGOUT_USER_FAILURE , payload : response.data.message});
+    }
+  } catch (error) {
+    console.log(error.response.data.message)
+    dispatch({type : LOGOUT_USER_FAILURE , payload : error.response.data.message});
+  }
+}
+
+export { registerNewUser, verifyUserOTP, uploadDetails, loginUserFunction , checkStudentAuthentication , logoutUser};

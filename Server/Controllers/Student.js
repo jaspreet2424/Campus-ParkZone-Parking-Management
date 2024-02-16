@@ -2,6 +2,7 @@ const StudentCollection = require("../Modals/Students");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 require("dotenv").config();
+const jwt = require("jsonwebtoken");
 const saltRounds = 16;
 
 /*Creating a transport connection for nodemailer */
@@ -199,8 +200,133 @@ const uploadStudentDetails = async (req, res) => {
   }
 };
 
+const loginUser = async (req, res) => {
+  try {
+    const { CRN, password } = req.body;
+
+    if (!CRN || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "All input fields are required",
+      });
+    }
+
+    const user = await StudentCollection.findOne({ CRN });
+
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "No User Found",
+      });
+    }
+
+    const correctPass = await bcrypt.compare(password, user.password);
+
+    if (!correctPass) {
+      return res.status(400).json({
+        success: false,
+        message: "Incorrect Password",
+      });
+    }
+
+    const token = await jwt.sign(
+      { studentID: user._id },
+      process.env.SECRET_KEY
+    );
+    user.token = token;
+    const savedUser = await user.save();
+
+    res.cookie("studentToken", token, {
+      httpOnly: true,
+      maxAge : 1000 * 60 * 60,
+    });
+
+    res.status(200).json({
+      success: true,
+      User: savedUser,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: `Error occured in Logging into account ${error}`,
+    });
+  }
+};
+
+const studentAuthentication = async (req, res) => {
+  try {
+    const  token  = req.cookies.studentToken;
+    if (!token) {
+      return res.status(400).json({
+        success: false,
+        token : token,
+        message: "Unauthorized access. No user found",
+      });
+    }
+
+    await jwt.verify(token, process.env.SECRET_KEY, async (err, decoded) => {
+      if (err) {
+        return res.status(400).json({
+          success: false,
+          message: "Unauthorized access",
+        });
+      } else {
+        const savedUser = await StudentCollection.findById(decoded.studentID);
+        return res.status(200).json({
+          success: true,
+          message : 'User login',
+          User: savedUser,
+        });
+      }
+    });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: `Unauthorized access ${error}`,
+    });
+  }
+};
+
+const logoutUser = async (req, res) => {
+  try {
+    const  token  = req.cookies.studentToken;
+    if (!token) {
+      return res.status(400).json({
+        success: false,
+        token : token,
+        message: "Unauthorized access. No user found",
+      });
+    }
+
+    await jwt.verify(token, process.env.SECRET_KEY, async (err, decoded) => {
+      if (err) {
+        return res.status(400).json({
+          success: false,
+          message: "Unauthorized access",
+        });
+      } else {
+        const savedUser = await StudentCollection.findById(decoded.studentID);
+        savedUser.token = null;
+        res.clearCookie('studentToken');
+        return res.status(200).json({
+          success: true,
+          message : 'Logout Successfully',
+        });
+      }
+    });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: `Unauthorized access ${error}`,
+    });
+  }
+};
+
 module.exports = {
   registerNewUser,
   verifyOTP,
   uploadStudentDetails,
+  loginUser,
+  studentAuthentication,
+  logoutUser,
 };

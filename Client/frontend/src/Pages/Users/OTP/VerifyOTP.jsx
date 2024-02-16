@@ -52,7 +52,7 @@ function VerifyOTP() {
 
   return (
     <div className="h-screen w-screen flex justify-center items-center">
-      <Toaster richColors position="bottom-right"></Toaster>
+      <Toaster richColors position="bottom-center"></Toaster>
       <div className="login-form flex flex-col items-center gap-8 bg-white px-10 py-12 w-1/4">
         <h1 className="text-5xl text-slate-800">Account Verification</h1>
         <form className="flex flex-col gap-4 w-full " onSubmit={handleFormSubmit}>

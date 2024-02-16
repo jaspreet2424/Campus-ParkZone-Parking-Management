@@ -8,6 +8,14 @@ import {
   UPLOAD_DETAIL_REQUEST,
   UPLOAD_DETAIL_SUCCESS,
   UPLOAD_DETAIL_FAILURE,
+  LOGIN_USER_REQUEST,
+  LOGIN_USER_SUCCESS,
+  LOGIN_USER_FAILURE,
+  CHECK_USER_AUTH_FAILURE,
+  CHECK_USER_AUTH_SUCCESS,
+  LOGOUT_USER_REQUEST,
+  LOGOUT_USER_SUCCESS,
+  LOGOUT_USER_FAILURE,
 } from "../Constants/Student";
 
 const userInitialState = {
@@ -60,26 +68,81 @@ const userReducer = (state = userInitialState, action) => {
         failure: action.payload,
       };
 
-    case UPLOAD_DETAIL_REQUEST :
+    case UPLOAD_DETAIL_REQUEST:
       return {
-        ...state ,
-        isLoading : true,
-      }
+        ...state,
+        isLoading: true,
+      };
 
-    case UPLOAD_DETAIL_SUCCESS :
+    case UPLOAD_DETAIL_SUCCESS:
       return {
-        ...state ,
-        isLoading : false,
-        success : 'Details Are Uploaded Successfully',
-        User : action.payload,
-      }
+        ...state,
+        isLoading: false,
+        success: "Details Are Uploaded Successfully",
+        User: action.payload,
+      };
 
-    case UPLOAD_DETAIL_FAILURE :
+    case UPLOAD_DETAIL_FAILURE:
       return {
-        ...state ,
-        isLoading : false,
+        ...state,
+        isLoading: false,
+        failure: action.payload,
+      };
+
+    case LOGIN_USER_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+      };
+
+    case LOGIN_USER_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        success: "Account Login Successfully",
+        User: action.payload,
+      };
+
+    case LOGIN_USER_FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        failure: action.payload,
+      };
+
+    case CHECK_USER_AUTH_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        User: action.payload,
+      };
+
+    case CHECK_USER_AUTH_FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        failure: action.payload,
+      };
+
+    case LOGOUT_USER_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+      };
+
+    case LOGOUT_USER_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        User: {},
+      };
+
+    case LOGOUT_USER_FAILURE:
+      return {
+        ...state,
+        isLoading: false,
         failure : action.payload,
-      }
+      };
 
     default:
       return state;

@@ -12,6 +12,7 @@ import { Provider } from "react-redux";
 import { store } from "./Redux/Store/Store.js";
 import VerifyOTP from "./Pages/Users/OTP/VerifyOTP.jsx";
 import UserFrom from "./Pages/Users/UserForm/UserFrom.jsx";
+import Logout from "./Pages/Users/Logout/Logout.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -26,6 +27,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route path="/sign-in" element={<Login />} />
             <Route path="/user-details" element={<Details />} />
             <Route path="/update-profile" element={<Update />} />
+            <Route path="/logout" element={<Logout />} />
           </Route>
         </Routes>
       </BrowserRouter>
