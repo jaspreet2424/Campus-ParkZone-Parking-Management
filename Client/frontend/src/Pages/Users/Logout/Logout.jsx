@@ -34,7 +34,7 @@ function Logout() {
               <Loader></Loader>
             </div>
           ) : (
-            <div>
+            <div className="flex gap-3">
               <button
                 className="text-lg px-6 py-1 rounded-md bg-green-600 text-white hover:underline"
                 onClick={handleLogoutFunction}

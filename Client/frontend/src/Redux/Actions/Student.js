@@ -65,6 +65,7 @@ const uploadDetails = (formData, navigate) => async (dispatch) => {
     const response = await axios.post("/api/upload-details", formData);
     if (response.data.success) {
       dispatch({ type: UPLOAD_DETAIL_SUCCESS, payload: response.data.User });
+      localStorage.removeItem('CRN');
       navigate("/sign-in");
     } else {
       dispatch({ type: UPLOAD_DETAIL_FAILURE, payload: response.data.message });

@@ -1,5 +1,6 @@
 const express = require("express");
 const studentRouter = require("./Routes/Student");
+const guardRouter = require("./Routes/Guards");
 const app = express();
 require("dotenv").config();
 const cors = require("cors");
@@ -14,12 +15,13 @@ app.use(cookieParser());
 app.use(
   cors({
     credentials: true,
-    methods: ["GET", "POST", "UPDATE", "DELETE"],
+    methods: ["GET", "POST", "UPDATE", "DELETE" , "PUT"],
     origin: "http://localhost:5173",
   })
 );
 
 app.use('/api' , studentRouter);
+app.use('/guard',guardRouter);
 
 app.listen(port, () => {
   console.log(`Parking Management System server is running at port ${port}`);

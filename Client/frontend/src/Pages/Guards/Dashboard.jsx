@@ -1,10 +1,11 @@
 import React from "react";
-import Navbar from "../../../Components/Navbar/Navbar";
+import GuardNavbar from "./GuardNavbar";
+// import './Guard.css'
 
-function Home() {
+function Dashboard() {
   return (
-    <>
-      <Navbar></Navbar>
+    <div>
+      <GuardNavbar></GuardNavbar>
       <div className="introduction-section w-full h-fit">
         <div className="upper-section flex flex-col items-center justify-center pt-12 gap-2">
           <h1 className="text-5xl text-slate-900 font-bold">
@@ -30,11 +31,13 @@ function Home() {
 
         <div className="lower-section flex flex-col items-center justify-center pt-12 gap-2">
           <h1 className="text-3xl text-slate-700 ">Welcome To </h1>
-          <h1 className="text-5xl text-slate-900 text-center">AutoSecure Guardian</h1>
+          <h1 className="logo-text text-5xl text-slate-900 text-center font-bold my-4">
+            AutoSecure Guardian
+          </h1>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
-export default Home;
+export default Dashboard;

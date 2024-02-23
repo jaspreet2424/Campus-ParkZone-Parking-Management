@@ -293,7 +293,6 @@ const logoutUser = async (req, res) => {
     if (!token) {
       return res.status(400).json({
         success: false,
-        token : token,
         message: "Unauthorized access. No user found",
       });
     }
@@ -307,6 +306,7 @@ const logoutUser = async (req, res) => {
       } else {
         const savedUser = await StudentCollection.findById(decoded.studentID);
         savedUser.token = null;
+        await savedUser.save();
         res.clearCookie('studentToken');
         return res.status(200).json({
           success: true,
