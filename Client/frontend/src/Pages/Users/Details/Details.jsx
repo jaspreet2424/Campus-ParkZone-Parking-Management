@@ -1,6 +1,7 @@
 import { React, useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import Navbar from "../../../Components/Navbar/Navbar";
+import userIcon from "/Images/user.png";
 
 function Details() {
   const User = useSelector((state) => state.User.User);
@@ -12,7 +13,13 @@ function Details() {
         <div className="w-3/4 pt-9">
           <div className="show-details-container flex-col">
             <div className="user-profile flex justify-center items-center py-4">
-              <img src="\Images\user.png" alt="" className="w-56 h-56" />
+              <img
+                src={`${
+                  User.token && User.profileImage ? User.profileImage : userIcon
+                }`}
+                alt="icon"
+                className="w-60 h-60 border-4 border-slate-800 rounded-full"
+              />
             </div>
 
             <div className="user-details p-4">
@@ -28,6 +35,18 @@ function Details() {
                     <td className="border border-slate-600 flex-1 py-1 px-2 text-start">
                       {User.token ? (
                         <span>{User.name}</span>
+                      ) : (
+                        <span>xxxxxxxxxx</span>
+                      )}
+                    </td>
+                  </tr>
+                  <tr className="flex">
+                    <th className="border border-slate-600 flex-1 py-1 px-2 text-start">
+                      Email
+                    </th>
+                    <td className="border border-slate-600 flex-1 py-1 px-2 text-start">
+                      {User.token ? (
+                        <span>{User.email}</span>
                       ) : (
                         <span>xxxxxxxxxx</span>
                       )}
@@ -124,6 +143,18 @@ function Details() {
                     <td className="border border-slate-600 flex-1 py-1 px-2 text-start">
                       {User.token ? (
                         <span>{User.URN}</span>
+                      ) : (
+                        <span>xxxxxxxxxx</span>
+                      )}
+                    </td>
+                  </tr>
+                  <tr className="flex">
+                    <th className="border border-slate-600 flex-1 py-1 px-2 text-start">
+                      Mobile Number
+                    </th>
+                    <td className="border border-slate-600 flex-1 py-1 px-2 text-start">
+                      {User.token ? (
+                        <span>{User.mobile}</span>
                       ) : (
                         <span>xxxxxxxxxx</span>
                       )}

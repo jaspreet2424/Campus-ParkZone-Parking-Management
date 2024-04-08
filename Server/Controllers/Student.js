@@ -4,6 +4,7 @@ const nodemailer = require("nodemailer");
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const saltRounds = 16;
+const cloudinary = require("cloudinary").v2;
 
 /*Creating a transport connection for nodemailer */
 const transport = nodemailer.createTransport({
@@ -47,8 +48,8 @@ const registerNewUser = async (req, res) => {
         .json({ success: false, message: "All input fields are required" });
     }
 
-    const existingStudent = await StudentCollection.findOne({ CRN });
-    if (existingStudent) {
+    const existingCRN = await StudentCollection.findOne({ CRN });
+    if (existingCRN) {
       return res.status(400).json({
         success: false,
         message: "Student Already registered with this CRN",
@@ -59,6 +60,14 @@ const registerNewUser = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: "Invalid Email",
+      });
+    }
+
+    const existingEmail = await StudentCollection.findOne({ email });
+    if (existingEmail) {
+      return res.status(400).json({
+        success: false,
+        message: "Email already in use",
       });
     }
 
@@ -153,8 +162,18 @@ const verifyOTP = async (req, res) => {
 
 const uploadStudentDetails = async (req, res) => {
   try {
-    const { name, fatherName, gender, dob, program, branch, year, CRN, URN } =
-      req.body;
+    const {
+      name,
+      fatherName,
+      gender,
+      dob,
+      program,
+      branch,
+      year,
+      CRN,
+      URN,
+      mobile,
+    } = req.body;
 
     if (
       !name ||
@@ -165,7 +184,8 @@ const uploadStudentDetails = async (req, res) => {
       !branch ||
       !year ||
       !CRN ||
-      !URN
+      !URN ||
+      !mobile
     ) {
       return res.status(400).json({
         success: false,
@@ -196,6 +216,55 @@ const uploadStudentDetails = async (req, res) => {
     return res.status(400).json({
       success: false,
       message: `Error occured in uploading student details ${error}`,
+    });
+  }
+};
+
+const uploadVehicleDetails = async (req, res) => {
+  try {
+    const { CRN, vehicleType, RCNumber, numberPlate } = req.body;
+
+    if (!vehicleType || !RCNumber || !numberPlate) {
+      return res.status(400).json({
+        success: false,
+        message: "All input fields are required",
+      });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: "No Image is Selected. Try Again",
+      });
+    }
+
+    const response = await cloudinary.uploader.upload(req.file.path);
+
+    const user = await StudentCollection.findOne({ CRN });
+
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "No User found with this CRN",
+      });
+    }
+
+    user.vehicleType = vehicleType;
+    user.RCNumber = RCNumber;
+    user.numberPlate = numberPlate;
+    user.RCImage = response.secure_url;
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      User: user,
+    });
+  } catch (error) {
+    console.log("Error ", error);
+    return res.status(400).json({
+      success: false,
+      message: `Error occured in uploading vehicle details ${error}`,
     });
   }
 };
@@ -238,7 +307,7 @@ const loginUser = async (req, res) => {
 
     res.cookie("studentToken", token, {
       httpOnly: true,
-      maxAge : 1000 * 60 * 60,
+      maxAge: 1000 * 60 * 60,
     });
 
     res.status(200).json({
@@ -255,11 +324,10 @@ const loginUser = async (req, res) => {
 
 const studentAuthentication = async (req, res) => {
   try {
-    const  token  = req.cookies.studentToken;
+    const token = req.cookies.studentToken;
     if (!token) {
       return res.status(400).json({
         success: false,
-        token : token,
         message: "Unauthorized access. No user found",
       });
     }
@@ -274,7 +342,7 @@ const studentAuthentication = async (req, res) => {
         const savedUser = await StudentCollection.findById(decoded.studentID);
         return res.status(200).json({
           success: true,
-          message : 'User login',
+          message: "User login",
           User: savedUser,
         });
       }
@@ -289,7 +357,7 @@ const studentAuthentication = async (req, res) => {
 
 const logoutUser = async (req, res) => {
   try {
-    const  token  = req.cookies.studentToken;
+    const token = req.cookies.studentToken;
     if (!token) {
       return res.status(400).json({
         success: false,
@@ -307,10 +375,10 @@ const logoutUser = async (req, res) => {
         const savedUser = await StudentCollection.findById(decoded.studentID);
         savedUser.token = null;
         await savedUser.save();
-        res.clearCookie('studentToken');
+        res.clearCookie("studentToken");
         return res.status(200).json({
           success: true,
-          message : 'Logout Successfully',
+          message: "Logout Successfully",
         });
       }
     });
@@ -322,11 +390,47 @@ const logoutUser = async (req, res) => {
   }
 };
 
+const uploadProfileImage = async (req, res) => {
+  try {
+    const { _ID } = req.body;
+
+    if (!req.file) {
+      return res
+        .status(400)
+        .json({ success: false, message: "No Image is Selected !" });
+    }
+
+    const user = await StudentCollection.findById(_ID);
+
+    if (!user) {
+      return res
+        .status(400)
+        .json({ success: false, message: "No User found !" });
+    }
+
+    const response = await cloudinary.uploader.upload(req.file.path);
+
+    const savedUser = await StudentCollection.findByIdAndUpdate(user._id , {profileImage : response.secure_url} , {new : true});
+
+    res.status(200).json({
+      success: true,
+      User: savedUser,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: `Error occured in uploading profile image ${error}`,
+    });
+  }
+};
+
 module.exports = {
   registerNewUser,
   verifyOTP,
   uploadStudentDetails,
+  uploadVehicleDetails,
   loginUser,
   studentAuthentication,
   logoutUser,
+  uploadProfileImage,
 };

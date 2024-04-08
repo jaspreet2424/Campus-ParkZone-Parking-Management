@@ -17,6 +17,12 @@ import {
   LOGOUT_USER_REQUEST,
   LOGOUT_USER_SUCCESS,
   LOGOUT_USER_FAILURE,
+  UPLOAD_PROFILE_IMAGE_REQUEST,
+  UPLOAD_PROFILE_IMAGE_FAILURE,
+  UPLOAD_PROFILE_IMAGE_SUCCESS,
+  UPLOAD_VEHICLE_DETAIL_SUCCESS,
+  UPLOAD_VEHICLE_DETAIL_REQUEST,
+  UPLOAD_VEHICLE_DETAIL_FAILURE,
 } from "../Constants/Student";
 import axios from "axios";
 axios.defaults.baseURL = "http://localhost:8000";
@@ -65,8 +71,7 @@ const uploadDetails = (formData, navigate) => async (dispatch) => {
     const response = await axios.post("/api/upload-details", formData);
     if (response.data.success) {
       dispatch({ type: UPLOAD_DETAIL_SUCCESS, payload: response.data.User });
-      localStorage.removeItem('CRN');
-      navigate("/sign-in");
+      navigate('/vehicle-details');
     } else {
       dispatch({ type: UPLOAD_DETAIL_FAILURE, payload: response.data.message });
     }
@@ -77,6 +82,22 @@ const uploadDetails = (formData, navigate) => async (dispatch) => {
     });
   }
 };
+
+const uploadVehicleDetails = (formData , navigate) => async(dispatch) => {
+  dispatch({type : UPLOAD_VEHICLE_DETAIL_REQUEST});
+  try {
+    const response = await axios.post("/api/vehicle-details" , formData);
+    if(response.data.success){
+      dispatch({type : UPLOAD_VEHICLE_DETAIL_SUCCESS , payload : response.data.User});
+      localStorage.removeItem("CRN");
+      navigate("/sign-in");
+    }else{
+      dispatch({type : UPLOAD_VEHICLE_DETAIL_FAILURE , payload : response.data.message});
+    }
+  } catch (error) {
+    dispatch({type : UPLOAD_VEHICLE_DETAIL_FAILURE , payload : error.response.data.message});
+  }
+}
 
 const loginUserFunction = (formData, navigate) => async (dispatch) => {
   dispatch({ type: LOGIN_USER_REQUEST });
@@ -115,20 +136,50 @@ const checkStudentAuthentication = () => async (dispatch) => {
   }
 };
 
-const logoutUser = (navigate) => async(dispatch) =>{
-  dispatch({type : LOGOUT_USER_REQUEST});
+const logoutUser = (navigate) => async (dispatch) => {
+  dispatch({ type: LOGOUT_USER_REQUEST });
   try {
-    const response = await axios.get('/api/sign-out');
-    if(response.data.success){
-      dispatch({type : LOGOUT_USER_SUCCESS , payload : response.data.message});
-      navigate('/');
-    }else{
-      dispatch({type : LOGOUT_USER_FAILURE , payload : response.data.message});
+    const response = await axios.get("/api/sign-out");
+    if (response.data.success) {
+      dispatch({ type: LOGOUT_USER_SUCCESS, payload: response.data.message });
+      navigate("/");
+    } else {
+      dispatch({ type: LOGOUT_USER_FAILURE, payload: response.data.message });
     }
   } catch (error) {
-    console.log(error.response.data.message)
-    dispatch({type : LOGOUT_USER_FAILURE , payload : error.response.data.message});
+    dispatch({
+      type: LOGOUT_USER_FAILURE,
+      payload: error.response.data.message,
+    });
   }
-}
+};
 
-export { registerNewUser, verifyUserOTP, uploadDetails, loginUserFunction , checkStudentAuthentication , logoutUser};
+const uploadProfileImage = (formdata) => async (dispatch) => {
+  dispatch({ type: UPLOAD_PROFILE_IMAGE_REQUEST });
+  try {
+    const response = await axios.post("/api/upload-profile-image", formdata);
+    if (response.data.success) {
+      dispatch({
+        type: UPLOAD_PROFILE_IMAGE_SUCCESS,
+        payload: response.data.User,
+      });
+    }
+  } catch (error) {
+    console.log(error.response.data.message);
+    dispatch({
+      type: UPLOAD_PROFILE_IMAGE_FAILURE,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export {
+  registerNewUser,
+  verifyUserOTP,
+  uploadDetails,
+  loginUserFunction,
+  checkStudentAuthentication,
+  logoutUser,
+  uploadProfileImage,
+  uploadVehicleDetails,
+};

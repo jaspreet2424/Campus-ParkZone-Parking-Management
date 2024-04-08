@@ -1,14 +1,19 @@
-import { Outlet, useLocation } from "react-router";
+import { Outlet} from "react-router";
 import { React, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch} from "react-redux";
 import { checkStudentAuthentication } from "./Redux/Actions/Student";
+import { guardAuthentication } from "./Redux/Actions/Guards";
+import Navbar from "./Components/Navbar/Navbar";
 
 function App() {
-  const location = useLocation();
   const dispatch = useDispatch();
   
   useEffect(() => {
     dispatch(checkStudentAuthentication());
+  },[dispatch]);
+
+  useEffect(()=>{
+    dispatch(guardAuthentication());
   },[dispatch]);
 
   return (

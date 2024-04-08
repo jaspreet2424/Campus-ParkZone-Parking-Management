@@ -17,6 +17,10 @@ import Dashboard from "./Pages/Guards/Dashboard.jsx";
 import Search from "./Pages/Guards/Search.jsx";
 import ViewStudents from "./Pages/Guards/ViewStudents.jsx";
 import SingleStudentDetail from "./Pages/Guards/SingleStudentDetail.jsx";
+import GuardLogin from "./Pages/Guards/GuardLogin.jsx";
+import GuardLogout from "./Pages/Guards/GuardLogout.jsx";
+import ShowVehicleDetails from "./Pages/Users/Details/ShowVehicleDetails.jsx";
+import VehicleDetail from '../src/Pages/Users/VehicleDetails/VehicleDetail.jsx';
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -28,10 +32,12 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route path="/sign-up" element={<Register />} />
             <Route path="/verify-otp" element={<VerifyOTP />} />
             <Route path="/user-form" element={<UserFrom />} />
+            <Route path="/vehicle-details" element={<VehicleDetail/>} />
             <Route path="/sign-in" element={<Login />} />
             <Route path="/user-details" element={<Details />} />
             <Route path="/update-profile" element={<Update />} />
             <Route path="/logout" element={<Logout />} />
+            <Route path="/show-vehicle-details" element={<ShowVehicleDetails/>} />
 
             <Route path="/guard/dashboard" element={<Dashboard />} />
             <Route path="/guard/search-filter" element={<Search />} />
@@ -40,6 +46,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
               path="/guard/single-student-details"
               element={<SingleStudentDetail />}
             />
+            <Route path="/guard/sign-in" element={<GuardLogin />} />
+            <Route path="/guard/logout" element = {<GuardLogout/>}/>
           </Route>
         </Routes>
       </BrowserRouter>

@@ -7,8 +7,8 @@ function Navbar() {
 
   return (
     <div className="w-full px-40 py-4 flex justify-between items-center bg-slate-900">
-      <Link to="/" className="text-white text-3xl">
-        AutoSecure Guardian
+      <Link to="/" className="text-white text-3xl flex">
+        <img src="/Images/logoBG.png" alt="logo" className="w-12 h-12"/>AutoSecure Guardian
       </Link>
       {User.token ? (
         <ul className="flex items-center justify-center">
@@ -26,6 +26,14 @@ function Navbar() {
               className="text-white text-lg px-4 py-2 mx-2 rounded-sm hover:border-b-2 hover:border-b-slate-400"
             >
               Details
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/show-vehicle-details"
+              className="text-white text-lg px-4 py-2 mx-2 rounded-sm hover:border-b-2 hover:border-b-slate-400"
+            >
+              Vehicle Details
             </Link>
           </li>
           <li>

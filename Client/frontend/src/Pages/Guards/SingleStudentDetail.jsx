@@ -1,6 +1,7 @@
 import React from "react";
 import GuardNavbar from "./GuardNavbar";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 function SingleStudentDetail() {
   const singleStudent = useSelector(
@@ -11,7 +12,7 @@ function SingleStudentDetail() {
     <div>
       <GuardNavbar></GuardNavbar>
       <div className="page-container w-full flex items-center justify-center">
-        <div className="w-3/4 pt-14 pb-20 ">
+        <div className="w-3/4 h-screen pt-14 pb-20 ">
           <div className="student-details-card pt-5 px-20 flex flex-col">
             <h1 className="text-2xl text-white bg-slate-900 py-2 text-center font-bold">
               Student Details Card
@@ -37,7 +38,9 @@ function SingleStudentDetail() {
                   <div className="flex justify-between">
                     <span className="font-bold text-lg">Father's Name :</span>
                     {singleStudent.fatherName ? (
-                      <span className="text-lg">{singleStudent.fatherName}</span>
+                      <span className="text-lg">
+                        {singleStudent.fatherName}
+                      </span>
                     ) : (
                       <span className="text-lg">xxxxxxxx</span>
                     )}
@@ -70,14 +73,14 @@ function SingleStudentDetail() {
                       <span className="text-lg">xxxxxxxx</span>
                     )}
                   </div>
-                  <div className="flex justify-between">
+                  {/* <div className="flex justify-between">
                     <span className="font-bold text-lg">Mobile :</span>
                     {singleStudent.dob ? (
                       <span className="text-lg">{singleStudent.dob}</span>
                     ) : (
                       <span className="text-lg">xxxxxxxx</span>
                     )}
-                  </div>
+                  </div> */}
                   <div className="flex justify-between">
                     <span className="font-bold text-lg">CRN :</span>
                     {singleStudent.CRN ? (
@@ -121,6 +124,15 @@ function SingleStudentDetail() {
                 </div>
               </div>
             </div>
+          </div>
+
+          <div className="flex mt-20 items-center justify-center gap-5">
+            <Link to='/guard/dashboard' className="bg-slate-800 rounded-md px-5 py-2 text-white text-lg hover:underline">
+              Back To Dashboard
+            </Link>
+            <Link to='/guard/students-list' className="bg-slate-800 rounded-md px-5 py-2 text-white text-lg hover:underline">
+              Back To View Students
+            </Link>
           </div>
         </div>
       </div>

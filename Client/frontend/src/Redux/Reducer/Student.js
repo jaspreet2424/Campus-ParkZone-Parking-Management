@@ -16,6 +16,11 @@ import {
   LOGOUT_USER_REQUEST,
   LOGOUT_USER_SUCCESS,
   LOGOUT_USER_FAILURE,
+  UPLOAD_PROFILE_IMAGE_REQUEST,
+  UPLOAD_PROFILE_IMAGE_SUCCESS,
+  UPLOAD_PROFILE_IMAGE_FAILURE,
+  UPLOAD_VEHICLE_DETAIL_REQUEST,
+  UPLOAD_VEHICLE_DETAIL_SUCCESS,
 } from "../Constants/Student";
 
 const userInitialState = {
@@ -141,7 +146,47 @@ const userReducer = (state = userInitialState, action) => {
       return {
         ...state,
         isLoading: false,
-        failure : action.payload,
+        failure: action.payload,
+      };
+
+    case UPLOAD_PROFILE_IMAGE_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+      };
+
+    case UPLOAD_PROFILE_IMAGE_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        success: "Image Uploaded Successfully",
+        User: action.payload,
+      };
+
+    case UPLOAD_PROFILE_IMAGE_FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        failure: action.payload,
+      };
+
+    case UPLOAD_VEHICLE_DETAIL_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case UPLOAD_VEHICLE_DETAIL_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        success: "Details Uploaded Successfully",
+        User: action.payload,
+      };
+    case UPLOAD_VEHICLE_DETAIL_REQUEST:
+      return {
+        ...state,
+        isLoading: false,
+        failure: action.payload,
       };
 
     default:

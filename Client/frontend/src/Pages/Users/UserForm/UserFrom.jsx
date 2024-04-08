@@ -16,6 +16,7 @@ function UserFrom() {
     branch: "",
     year: "",
     URN: "",
+    mobile : '',
     CRN: localStorage.getItem("CRN"),
   });
 
@@ -36,6 +37,7 @@ function UserFrom() {
       branch: "",
       year: "",
       URN: "",
+      mobile : "",
     });
   };
 
@@ -208,6 +210,15 @@ function UserFrom() {
               <option value="Mechanical Engineering" className="px-4 py-2 ">
                 Mechanical Engineering
               </option>
+              <option value="Bachelors in Computer Applications" className="px-4 py-2 ">
+                Bachelors in Computer Applications
+              </option>
+              <option value="Master's in Computer Applications" className="px-4 py-2 ">
+                Master's in Computer Applications
+              </option>
+              <option value="Master in Business Administration" className="px-4 py-2 ">
+                Master in Business Administration
+              </option>
             </select>
           </div>
 
@@ -265,6 +276,22 @@ function UserFrom() {
               value={formData.URN}
               onChange={(e) =>
                 setFormData({ ...formData, URN: e.target.value })
+              }
+            />
+          </div>
+
+          <div className="each-detail px-3 w-full  flex flex-col justify-between ">
+            <label htmlFor="mobile" className="text-lg font-bold flex-1">
+              Personal Mobile Number :
+            </label>
+            <input
+              type="text"
+              id="mobile"
+              placeholder="enter your mobile number"
+              className="px-3 py-1 text-lg rounded-sm border border-slate-400 hover:border-slate-600 focus:outline-slate-950 bg-slate-100 flex-1"
+              value={formData.mobile}
+              onChange={(e) =>
+                setFormData({ ...formData, mobile: e.target.value })
               }
             />
           </div>

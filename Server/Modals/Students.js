@@ -52,7 +52,19 @@ const studentSchema = new mongoose.Schema({
   },
   profileImage : {
     type : String,
-  }
+  },
+  vehicleType : {
+    type : String,
+  },
+  RCNumber : {
+    type : String,
+  },
+  numberPlate : {
+    type : String,
+  },
+  RCImage : {
+    type : String,
+  },
 });
 
 const StudentCollection = new mongoose.model("students", studentSchema);
