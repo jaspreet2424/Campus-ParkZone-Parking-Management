@@ -19,18 +19,18 @@ function ShowVehicleDetails() {
               </h1>
               <table className="w-full">
                 <tbody>
-                  <tr className="flex">
+                  {/* <tr className="flex">
                     <th className="border border-slate-600 flex-1 py-1 px-2 text-start">
                       Vehicle Type
                     </th>
-                    <td className="border border-slate-600 flex-1 py-1 px-2 text-start">
+                     <td className="border border-slate-600 flex-1 py-1 px-2 text-start">
                       {User.token ? (
                         <span>{User.vehicleType}</span>
                       ) : (
                         <span>xxxxxxxxxx</span>
                       )}
-                    </td>
-                  </tr>
+                    </td> 
+                  </tr> */}
                   <tr className="flex">
                     <th className="border border-slate-600 flex-1 py-1 px-2 text-start">
                       RC Number

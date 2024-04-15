@@ -428,6 +428,56 @@ const uploadProfileImage = async (req, res) => {
   }
 };
 
+const updateVehicleDetails = async(req,res) =>{
+  try {
+    const {RCNumber , numberPlate , _Id} = req.body;
+
+    console.log(RCNumber)
+    console.log(numberPlate)
+    console.log(_Id)
+
+    // if(!RCNumber || !numberPlate || !_Id){
+    //   return res.status(400).json({
+    //     success : false,
+    //     message : "All input fields are required"
+    //   })
+    // }
+
+    if (!req.file) {
+      return res
+        .status(400)
+        .json({ success: false, message: "No Image is Selected!" });
+    }
+
+    const user = await StudentCollection.findById(_Id);
+
+    if (!user) {
+      return res
+        .status(400)
+        .json({ success: false, message: "No User found !" });
+    }
+
+    const response = await cloudinary.uploader.upload(req.file.path);
+
+    user.RCNumber = RCNumber;
+    user.numberPlate = numberPlate;
+    user.RCImage = response.secure_url;
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      User: user,
+    });
+
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: `Error occured in updating vehicle details ${error}`,
+    });
+  }
+}
+
 const updateUserDetails = async (req, res) => {
   try {
     const { userId } = req.body;
@@ -468,4 +518,5 @@ module.exports = {
   logoutUser,
   uploadProfileImage,
   updateUserDetails,
+  updateVehicleDetails
 };

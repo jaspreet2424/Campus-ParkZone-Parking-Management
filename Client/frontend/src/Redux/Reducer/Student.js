@@ -24,6 +24,9 @@ import {
   UPDATE_USER_DETAILS_REQUEST,
   UPDATE_USER_DETAILS_SUCCESS,
   UPDATE_USER_DETAILS_FAILURE,
+  UPDATE_VEHICLE_DETAILS_REQUEST,
+  UPDATE_VEHICLE_DETAILS_SUCCESS,
+  UPDATE_VEHICLE_DETAILS_FAILURE,
 } from "../Constants/Student";
 
 const userInitialState = {
@@ -209,6 +212,26 @@ const userReducer = (state = userInitialState, action) => {
         isLoading: false,
         failure: action.payload,
       };
+
+    case UPDATE_VEHICLE_DETAILS_REQUEST:
+      return {
+        ...state , 
+        isLoading : true,
+      }
+
+    case UPDATE_VEHICLE_DETAILS_SUCCESS:
+      return {
+        ...state , 
+        isLoading : false,
+        User : action.payload
+      }
+
+    case UPDATE_VEHICLE_DETAILS_FAILURE:
+      return {
+        ...state , 
+        isLoading : false,
+        failure : action.payload
+      }
 
     default:
       return state;

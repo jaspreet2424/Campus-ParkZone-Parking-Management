@@ -26,6 +26,9 @@ import {
   UPDATE_USER_DETAILS_REQUEST,
   UPDATE_USER_DETAILS_FAILURE,
   UPDATE_USER_DETAILS_SUCCESS,
+  UPDATE_VEHICLE_DETAILS_REQUEST,
+  UPDATE_VEHICLE_DETAILS_SUCCESS,
+  UPDATE_VEHICLE_DETAILS_FAILURE,
 } from "../Constants/Student";
 import axios from "axios";
 axios.defaults.baseURL = "http://localhost:8000";
@@ -208,6 +211,30 @@ const updateUserDetails = (formData) => async (dispatch) => {
   }
 };
 
+const updateVehicleDetails = (formData) => async (dispatch) => {
+  dispatch({ type: UPDATE_VEHICLE_DETAILS_REQUEST });
+  try {
+    const respose = await axios.post("/api/update-vehicle-details", formData);
+    if (respose.data.success) {
+      dispatch({
+        type: UPDATE_VEHICLE_DETAILS_SUCCESS,
+        payload: respose.data.User,
+      });
+    } else {
+      dispatch({
+        type: UPDATE_VEHICLE_DETAILS_FAILURE,
+        payload: respose.data.message,
+      });
+    }
+  } catch (error) {
+    console.log(error.response.data.message)
+    dispatch({
+      type: UPDATE_VEHICLE_DETAILS_FAILURE,
+      payload: error.respose.data.message,
+    });
+  }
+};
+
 export {
   registerNewUser,
   verifyUserOTP,
@@ -218,4 +245,5 @@ export {
   uploadProfileImage,
   uploadVehicleDetails,
   updateUserDetails,
+  updateVehicleDetails,
 };

@@ -3,6 +3,7 @@ import ProfilePicture from "./ProfilePicture";
 import UserDetailsForm from "./UserDetailsForm";
 import Navbar from "../../../Components/Navbar/Navbar";
 import Footer from '../../../Components/Footer/Footer'
+import UpdateVehicle from "./updateVehicle";
 
 function Update() {
   return (
@@ -12,6 +13,7 @@ function Update() {
         <div className="w-3/4 bg-white pt-9 pb-16">
           <ProfilePicture />
           <UserDetailsForm />
+          <UpdateVehicle/>
         </div>
       </div>
       <Footer/>
