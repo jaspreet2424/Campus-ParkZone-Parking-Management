@@ -1,6 +1,7 @@
 import React from "react";
 import Navbar from "../../../Components/Navbar/Navbar";
 import Footer from "../../../Components/Footer/Footer";
+import AGlogo from "/Images/logoBG.png";
 // import "../../Guards/Guard.css";
 
 function Home() {
@@ -42,30 +43,30 @@ function Home() {
       <Navbar></Navbar>
       <div className="introduction-section w-full h-fit">
         <div className="upper-section flex flex-col items-center justify-center pt-32 gap-2">
-          <h1 className="text-5xl text-slate-900 font-bold">
+          <h1 className="text-5xl text-slate-900 font-bold z-10">
             GURU NANAK DEV ENGINEERING COLLEGE
           </h1>
-          <h1 className="text-2xl text-slate-700">
+          <h1 className="text-2xl text-slate-700 z-10">
             An Autonomous College U/S UGC Act-1956 &#91; 2&#40;f&#41; and
             12&#40;B&#41; &#93;
           </h1>
-          <h1 className="text-lg text-slate-700">
+          <h1 className="text-lg text-slate-700 z-10">
             AICTE Approved, ISO 9001:2015 Certified
           </h1>
-          <h1 className="text-lg text-slate-700">
+          <h1 className="text-lg text-slate-700 z-10">
             Affiliated to I.K. Gujral Punjab Technical University , Jalandhar
           </h1>
-          <h1 className="text-lg text-slate-700">
+          <h1 className="text-lg text-slate-700 z-10">
             IEI Accredited , UG Programmes
           </h1>
-          <h1 className="text-lg text-slate-700">
+          <h1 className="text-lg text-slate-700 z-10">
             Institute Accredited by NAAC&#40;A Grade&#41; and TCS
           </h1>
         </div>
 
-        <div className="lower-section flex flex-col items-center justify-center pt-12 gap-2">
-          <h1 className="text-3xl text-slate-700 ">Welcome To </h1>
-          <h1 className="logo-text text-5xl text-slate-900 text-center font-bold my-4">
+        <div className=" relative lower-section flex flex-col items-center justify-center pt-12 gap-2 ">
+          <h1 className="text-3xl text-slate-700 z-10">Welcome To </h1>
+          <h1 className="logo-text text-5xl text-slate-900 text-center font-bold my-4 z-10">
             AutoSecure Guardian
           </h1>
         </div>

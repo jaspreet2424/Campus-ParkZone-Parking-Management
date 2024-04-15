@@ -300,9 +300,7 @@ function UserFrom() {
 
           <button className="px-4 py-1 text-lg bg-slate-900 text-white rounded-sm hover:bg-slate-700">
             {isLoading ? (
-              <div className="flex justify-center items-center">
-                <Loader></Loader>
-              </div>
+              <span>Loading...</span>
             ) : (
               <span>Upload Now</span>
             )}

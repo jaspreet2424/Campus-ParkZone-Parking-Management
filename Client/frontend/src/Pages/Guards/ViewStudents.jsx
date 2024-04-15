@@ -2,18 +2,21 @@ import React, { useEffect, useState } from "react";
 import GuardNavbar from "./GuardNavbar";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import userIcon from "/Images/user.png";
 import {
   deleteSingleUser,
   fetchAllStudentsData,
-  filterDataByYear,
   getSingleStudent,
 } from "../../Redux/Actions/Guards";
 import { toast, Toaster } from "sonner";
-import { DELETE_USER_FAILURE, FILTER_DATA_BY_YEAR_FAILURE } from "../../Redux/Constants/Guards";
+import {
+  DELETE_USER_FAILURE,
+  FILTER_DATA_BY_YEAR_FAILURE,
+} from "../../Redux/Constants/Guards";
+import GuardFooter from "./GuardFooter";
 
 function ViewStudents() {
   const [showFilter, setShowFilter] = useState(false);
-  const [filterText, setFilterText] = useState('');
 
   const isLoading = useSelector((state) => state.studentDetails.isLoading);
   const failure = useSelector((state) => state.studentDetails.failure);
@@ -23,31 +26,26 @@ function ViewStudents() {
 
   const dispatch = useDispatch();
 
-  const handleFilterClick = () => {
-    dispatch(filterDataByYear(filterText));
-  }
-
-  const handleRefreshData = () =>{
+  const handleRefreshData = () => {
     dispatch(fetchAllStudentsData());
-    dispatch({type : FILTER_DATA_BY_YEAR_FAILURE , payload : ''});
-  }
-
-  useEffect(()=>{
-    if(failure){
-      toast.error(failure);
-    }
-  },[failure]);
+  };
 
   useEffect(() => {
     dispatch(fetchAllStudentsData());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (failure) {
+      toast.error(failure);
+    }
+  }, [failure]);
 
   return (
     <>
       <Toaster richColors position="bottom-center"></Toaster>
       <GuardNavbar></GuardNavbar>
       <div className="w-full flex items-center justify-center">
-        <div className="w-3/4 pt-14 pb-20 ">
+        <div className="w-3/4 pt-14 ">
           <h1 className="my-6 text-center text-4xl font-bold text-slate-900">
             List of Students
           </h1>
@@ -62,9 +60,7 @@ function ViewStudents() {
                   Refresh Page
                 </button>
 
-                <button className="px-4 bg-slate-900 text-white">{filterText}</button>
-
-                <div className="relative">
+                {/* <div className="relative">
                   <button
                     className="bg-slate-600 text-white text-lg rounded-md px-4 font-bold py-1 hover:bg-slate-800"
                     onClick={() => setShowFilter(!showFilter)}
@@ -119,11 +115,12 @@ function ViewStudents() {
                       4th Year
                     </li>
                   </ul>
-                </div>
+                </div> */}
               </div>
               <table className="w-full">
                 <thead className="w-full">
-                  <tr className="grid grid-cols-6 gap-3 px-4 bg-indigo-400 rounded-md mt-4 py-4">
+                  <tr className="grid grid-cols-7 gap-3 px-4 bg-indigo-400 rounded-md mt-4 py-4">
+                    <td className="text-xl text-slate-900 font-bold">User</td>
                     <td className="text-xl text-slate-900 font-bold">CRN</td>
                     <td className="text-xl text-slate-900 font-bold">Name</td>
                     <td className="text-xl text-slate-900 font-bold">
@@ -141,7 +138,7 @@ function ViewStudents() {
               </table>
             </div>
 
-            <div className="students-details-container pt-5">
+            <div className="students-details-container pt-5 h-fit">
               {isLoading ? (
                 <span className="text-4xl text-slate-700 items-center justify-center flex">
                   Fetching Data.....
@@ -152,22 +149,31 @@ function ViewStudents() {
                     {studentDetails.map((item) => {
                       return (
                         <tr
-                          className="grid grid-cols-6 gap-3 px-3 w-full rounded-md my-5 bg-slate-300 items-center py-2"
+                          className="grid grid-cols-7 gap-3 px-3 w-full rounded-md my-5 bg-slate-300 items-center py-2"
                           key={item._id}
                         >
-                          <td className="text-xl text-slate-900 font-bold">
+                          <td className="text-xl text-slate-900 font-bold overflow-hidden  mx-auto">
+                            <img
+                              src={
+                                item.profileImage ? item.profileImage : userIcon
+                              }
+                              alt="icon"
+                              className="w-16 h-16 rounded-full border-2 border-slate-800"
+                            />
+                          </td>
+                          <td className="text-xl text-slate-900 font-bold mx-auto">
                             {item.CRN}
                           </td>
-                          <td className="text-xl text-slate-900 font-bold">
+                          <td className="text-xl text-slate-900 font-bold mx-auto">
                             {item.name}
                           </td>
-                          <td className="text-xl text-slate-900 font-bold">
+                          <td className="text-xl text-slate-900 font-bold mx-auto">
                             {item.program}
                           </td>
-                          <td className="text-xl text-slate-900 font-bold">
+                          <td className="text-xl text-slate-900 font-bold mx-auto">
                             {item.year}
                           </td>
-                          <td className="text-xl text-slate-900 font-bold">
+                          <td className="text-xl text-slate-900 font-bold mx-auto">
                             <Link
                               className="px-4 py-2 rounded-md text-lg font-bold bg-emerald-500 hover:underline"
                               onClick={() =>
@@ -178,7 +184,7 @@ function ViewStudents() {
                               View Details
                             </Link>
                           </td>
-                          <td className="text-xl text-slate-900 font-bold s">
+                          <td className="text-xl text-slate-900 font-bold mx-auto">
                             <button
                               className="px-4 py-2 rounded-md text-lg font-bold bg-red-500 hover:underline"
                               onClick={() =>
@@ -202,6 +208,7 @@ function ViewStudents() {
           </div>
         </div>
       </div>
+      <GuardFooter/>
     </>
   );
 }

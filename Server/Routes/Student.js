@@ -8,6 +8,7 @@ const {
   logoutUser,
   uploadProfileImage,
   uploadVehicleDetails,
+  updateUserDetails,
 } = require("../Controllers/Student");
 const studentRouter = express.Router();
 const multer = require('multer');
@@ -20,6 +21,7 @@ studentRouter.post("/sign-up", registerNewUser);
 studentRouter.post("/sign-in", loginUser);
 studentRouter.post("/verify-otp", verifyOTP);
 studentRouter.post("/upload-details", uploadStudentDetails);
+studentRouter.post("/update-details", updateUserDetails);
 studentRouter.post("/vehicle-details", upload.single('RCImage') ,uploadVehicleDetails);
 studentRouter.get("/student-auth", studentAuthentication);
 studentRouter.get("/sign-out", logoutUser);

@@ -23,6 +23,9 @@ import {
   UPLOAD_VEHICLE_DETAIL_SUCCESS,
   UPLOAD_VEHICLE_DETAIL_REQUEST,
   UPLOAD_VEHICLE_DETAIL_FAILURE,
+  UPDATE_USER_DETAILS_REQUEST,
+  UPDATE_USER_DETAILS_FAILURE,
+  UPDATE_USER_DETAILS_SUCCESS,
 } from "../Constants/Student";
 import axios from "axios";
 axios.defaults.baseURL = "http://localhost:8000";
@@ -71,7 +74,7 @@ const uploadDetails = (formData, navigate) => async (dispatch) => {
     const response = await axios.post("/api/upload-details", formData);
     if (response.data.success) {
       dispatch({ type: UPLOAD_DETAIL_SUCCESS, payload: response.data.User });
-      navigate('/vehicle-details');
+      navigate("/vehicle-details");
     } else {
       dispatch({ type: UPLOAD_DETAIL_FAILURE, payload: response.data.message });
     }
@@ -83,21 +86,30 @@ const uploadDetails = (formData, navigate) => async (dispatch) => {
   }
 };
 
-const uploadVehicleDetails = (formData , navigate) => async(dispatch) => {
-  dispatch({type : UPLOAD_VEHICLE_DETAIL_REQUEST});
+const uploadVehicleDetails = (formData, navigate) => async (dispatch) => {
+  dispatch({ type: UPLOAD_VEHICLE_DETAIL_REQUEST });
   try {
-    const response = await axios.post("/api/vehicle-details" , formData);
-    if(response.data.success){
-      dispatch({type : UPLOAD_VEHICLE_DETAIL_SUCCESS , payload : response.data.User});
+    const response = await axios.post("/api/vehicle-details", formData);
+    if (response.data.success) {
+      dispatch({
+        type: UPLOAD_VEHICLE_DETAIL_SUCCESS,
+        payload: response.data.User,
+      });
       localStorage.removeItem("CRN");
       navigate("/sign-in");
-    }else{
-      dispatch({type : UPLOAD_VEHICLE_DETAIL_FAILURE , payload : response.data.message});
+    } else {
+      dispatch({
+        type: UPLOAD_VEHICLE_DETAIL_FAILURE,
+        payload: response.data.message,
+      });
     }
   } catch (error) {
-    dispatch({type : UPLOAD_VEHICLE_DETAIL_FAILURE , payload : error.response.data.message});
+    dispatch({
+      type: UPLOAD_VEHICLE_DETAIL_FAILURE,
+      payload: error.response.data.message,
+    });
   }
-}
+};
 
 const loginUserFunction = (formData, navigate) => async (dispatch) => {
   dispatch({ type: LOGIN_USER_REQUEST });
@@ -173,6 +185,29 @@ const uploadProfileImage = (formdata) => async (dispatch) => {
   }
 };
 
+const updateUserDetails = (formData) => async (dispatch) => {
+  dispatch({ type: UPDATE_USER_DETAILS_REQUEST });
+  try {
+    const response = await axios.post("/api/update-details", formData);
+    if (response.data.success) {
+      dispatch({
+        type: UPDATE_USER_DETAILS_SUCCESS,
+        payload: response.data.User,
+      });
+    } else {
+      dispatch({
+        type: UPDATE_USER_DETAILS_FAILURE,
+        payload: response.data.message,
+      });
+    }
+  } catch (error) {
+    dispatch({
+      type: UPDATE_USER_DETAILS_FAILURE,
+      payload: error.response.data.message,
+    });
+  }
+};
+
 export {
   registerNewUser,
   verifyUserOTP,
@@ -182,4 +217,5 @@ export {
   logoutUser,
   uploadProfileImage,
   uploadVehicleDetails,
+  updateUserDetails,
 };

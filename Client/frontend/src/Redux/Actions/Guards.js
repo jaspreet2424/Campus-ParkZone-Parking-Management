@@ -17,12 +17,8 @@ import {
   LOGOUT_USER_REQUEST,
   LOGOUT_USER_SUCCESS,
   LOGOUT_USER_FAILURE,
-  FILTER_DATA_BY_YEAR_REQUEST,
-  FILTER_DATA_BY_YEAR_SUCCESS,
-  FILTER_DATA_BY_YEAR_FAILURE,
-  SEARCH_DATA_REQUEST,
-  SEARCH_DATA_SUCCESS,
-  SEARCH_DATA_FAILURE,
+  SEND_NOTIFICATION_FAILURE,
+  SEND_NOTIFICATION_SUCCESS,
 } from "../Constants/Guards";
 import axios from "axios";
 axios.defaults.baseURL = "http://localhost:8000";
@@ -147,39 +143,15 @@ const getSingleStudent = (studentId) => async (dispatch) => {
   }
 };
 
-const filterDataByYear = (year) => async (dispatch) => {
-  dispatch({ type: FILTER_DATA_BY_YEAR_REQUEST });
+const sendNotifications = (userId) => async (dispatch) => {
   try {
-    const response = await axios.get(`/guard/filter-data/${year}`);
-    if (response.data.success) {
-      dispatch({
-        type: FILTER_DATA_BY_YEAR_SUCCESS,
-        payload: response.data.filterData,
-      });
-    } else {
-      dispatch({
-        type: FILTER_DATA_BY_YEAR_FAILURE,
-        payload: response.data.message,
-      });
+    const response = await axios.get(`/guard/send-notification/${userId}`);
+    if(response.data.success){
+      dispatch({type : SEND_NOTIFICATION_SUCCESS})
     }
   } catch (error) {
     dispatch({
-      type: FILTER_DATA_BY_YEAR_FAILURE,
-      payload: error.response.data.message,
-    });
-  }
-};
-
-const searchDetails = (text) => async (dispatch) => {
-  dispatch({ type: SEARCH_DATA_REQUEST });
-  try {
-    const response = await axios.get(`/guard/search-data/${text}`);
-    if (response.data.success) {
-      dispatch({ type: SEARCH_DATA_SUCCESS, payload: response.data.details });
-    }
-  } catch (error) {
-    dispatch({
-      type: SEARCH_DATA_FAILURE,
+      type: SEND_NOTIFICATION_FAILURE,
       payload: error.response.data.message,
     });
   }
@@ -192,6 +164,5 @@ export {
   loginGuard,
   logoutAccount,
   guardAuthentication,
-  filterDataByYear,
-  searchDetails
+  sendNotifications,
 };

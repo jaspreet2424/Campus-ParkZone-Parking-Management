@@ -21,6 +21,9 @@ import {
   UPLOAD_PROFILE_IMAGE_FAILURE,
   UPLOAD_VEHICLE_DETAIL_REQUEST,
   UPLOAD_VEHICLE_DETAIL_SUCCESS,
+  UPDATE_USER_DETAILS_REQUEST,
+  UPDATE_USER_DETAILS_SUCCESS,
+  UPDATE_USER_DETAILS_FAILURE,
 } from "../Constants/Student";
 
 const userInitialState = {
@@ -159,7 +162,6 @@ const userReducer = (state = userInitialState, action) => {
       return {
         ...state,
         isLoading: false,
-        success: "Image Uploaded Successfully",
         User: action.payload,
       };
 
@@ -183,6 +185,25 @@ const userReducer = (state = userInitialState, action) => {
         User: action.payload,
       };
     case UPLOAD_VEHICLE_DETAIL_REQUEST:
+      return {
+        ...state,
+        isLoading: false,
+        failure: action.payload,
+      };
+
+    case UPDATE_USER_DETAILS_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+      };
+
+    case UPDATE_USER_DETAILS_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        User: action.payload,
+      };
+    case UPDATE_USER_DETAILS_FAILURE:
       return {
         ...state,
         isLoading: false,

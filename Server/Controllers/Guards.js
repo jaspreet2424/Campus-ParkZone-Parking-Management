@@ -6,6 +6,14 @@ require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const saltRounds = 16;
 
+const transport = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL,
+    pass: process.env.PASSWORD,
+  },
+});
+
 const isCorrectEmail = (email) => {
   const regrex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]/;
   return regrex.test(email);
@@ -268,83 +276,52 @@ const getSingleStudent = async (req, res) => {
   }
 };
 
-const filterStudentsByYear = async (req, res) => {
+
+const sendNotification = async (req, res) => {
   try {
-    const { year } = req.params;
-    console.log(year);
-    const studentsData = await StudentCollection.find();
+    const { userId } = req.params;
 
-    switch (year) {
-      case 1:
-        var filterArray = studentsData.filter(
-          (items) => items.year === "1st Year"
-        );
-        res.status(200).json({
-          success: true,
-          filterData: filterArray,
-        });
-        break;
+    const user = await StudentCollection.findById(userId);
 
-      case 2:
-        var filterArray = studentsData.filter(
-          (items) => items.year === "2nd Year"
-        );
-        res.status(200).json({
-          success: true,
-          filterData: filterArray,
-        });
-        break;
-
-      case 3:
-        var filterArray = studentsData.filter(
-          (items) => items.year === "3rd Year"
-        );
-        res.status(200).json({
-          success: true,
-          filterData: filterArray,
-        });
-        break;
-
-      case 4:
-        var filterArray = studentsData.filter(
-          (items) => items.year === "4th Year"
-        );
-        res.status(200).json({
-          success: true,
-          filterData: filterArray,
-        });
-        break;
-
-      default:
-        res.status(200).json({
-          success: false,
-          message: "No Data Matched!",
-        });
-        break;
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: `No User Found`,
+      });
     }
-  } catch (error) {
-    res.status(400).json({
-      success: false,
-      message: `Error occured in filtering data ${error}`,
-    });
-  }
-};
+    const email = user.email;
+    const currentDate = new Date();
 
-const searchDetails = async (req, res) => {
-  try {
-    const { text } = req.params;
-    const data = await StudentCollection.find();
+    // Get the date components
+    const day = currentDate.getDate();
+    const month = currentDate.getMonth() + 1; // Month starts from 0
+    const year = currentDate.getFullYear();
 
-    const newArray = data.filter((item) => item.CRN === Number(text));
-    
+    // Get the time components
+    const hours = currentDate.getHours();
+    const minutes = currentDate.getMinutes();
+    const seconds = currentDate.getSeconds();
+
+    // Format the date and time
+    const formattedDate = `${day}/${month}/${year}`;
+    const formattedTime = `${hours}:${minutes}:${seconds}`;
+
+    const notification = {
+      from: process.env.EMAIL,
+      to: email,
+      subject: "Vehicle Entered Successfully",
+      text: `Your Vehicle (Reg. no. ${user.numberPlate}) entered Campus just at ${formattedTime} on date ${formattedDate} . AutoSecure Guardian vehicle verification successfull.`,
+    };
+
+    await transport.sendMail(notification);
+
     res.status(200).json({
       success : true,
-      details : (newArray) ? newArray : data
     })
   } catch (error) {
     res.status(400).json({
       success: false,
-      message: `Error occured in searching data ${error}`,
+      message: `Error occured in sending notification ${error}`,
     });
   }
 };
@@ -357,6 +334,5 @@ module.exports = {
   logoutAccount,
   guardAuthectication,
   loginGuard,
-  filterStudentsByYear,
-  searchDetails,
+  sendNotification,
 };

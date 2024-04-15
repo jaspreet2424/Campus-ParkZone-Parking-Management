@@ -1,6 +1,7 @@
 import { React, useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import Navbar from "../../../Components/Navbar/Navbar";
+import Footer from "../../../Components/Footer/Footer";
 import rcIcon from "/Images/noDataFound.png";
 
 function ShowVehicleDetails() {
@@ -78,6 +79,7 @@ function ShowVehicleDetails() {
           </div>
         </div>
       </div>
+      <Footer/>
     </>
   );
 }

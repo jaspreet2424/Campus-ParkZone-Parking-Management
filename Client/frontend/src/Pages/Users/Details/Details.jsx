@@ -1,6 +1,7 @@
 import { React, useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import Navbar from "../../../Components/Navbar/Navbar";
+import Footer from "../../../Components/Footer/Footer";
 import userIcon from "/Images/user.png";
 
 function Details() {
@@ -10,23 +11,24 @@ function Details() {
     <>
       <Navbar></Navbar>
       <div className="w-full flex justify-center">
-        <div className="w-3/4 pt-9">
-          <div className="show-details-container flex-col">
-            <div className="user-profile flex justify-center items-center py-4">
+        <div className="w-3/4 pt-9 pb-12">
+          <div className="show-details-container flex flex-col">
+            <div className="w-full flex items-center justify-center">
+            <div className="w-60 h-60 rounded-full border-4 border-slate-800 overflow-hidden">
               <img
                 src={`${
                   User.token && User.profileImage ? User.profileImage : userIcon
                 }`}
                 alt="icon"
-                className="w-60 h-60 border-4 border-slate-800 rounded-full"
               />
+            </div>
             </div>
 
             <div className="user-details p-4">
               <h1 className="text-center text-4xl font-bold text-slate-900 my-4">
                 User Details
               </h1>
-              <table className="w-full">
+              <table className="w-full bg-white">
                 <tbody>
                   <tr className="flex">
                     <th className="border border-slate-600 flex-1 py-1 px-2 text-start">
@@ -166,6 +168,7 @@ function Details() {
           </div>
         </div>
       </div>
+      <Footer/>
     </>
   );
 }

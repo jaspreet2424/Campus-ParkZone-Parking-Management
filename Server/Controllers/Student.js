@@ -392,15 +392,15 @@ const logoutUser = async (req, res) => {
 
 const uploadProfileImage = async (req, res) => {
   try {
-    const { _ID } = req.body;
+    const { _Id } = req.body;
 
     if (!req.file) {
       return res
         .status(400)
-        .json({ success: false, message: "No Image is Selected !" });
+        .json({ success: false, message: "No Image is Selected!" });
     }
 
-    const user = await StudentCollection.findById(_ID);
+    const user = await StudentCollection.findById(_Id);
 
     if (!user) {
       return res
@@ -410,7 +410,11 @@ const uploadProfileImage = async (req, res) => {
 
     const response = await cloudinary.uploader.upload(req.file.path);
 
-    const savedUser = await StudentCollection.findByIdAndUpdate(user._id , {profileImage : response.secure_url} , {new : true});
+    const savedUser = await StudentCollection.findByIdAndUpdate(
+      user._id,
+      { profileImage: response.secure_url },
+      { new: true }
+    );
 
     res.status(200).json({
       success: true,
@@ -424,6 +428,36 @@ const uploadProfileImage = async (req, res) => {
   }
 };
 
+const updateUserDetails = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    const user = await StudentCollection.findById(userId);
+
+    if (!user) {
+      res.status(422).json({
+        success: false,
+        message: "No user found!",
+      });
+    }
+
+    const savedUser = await StudentCollection.findByIdAndUpdate(
+      user._id,
+      { $set: req.body },
+      { new: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      User: savedUser,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: `Error occured in updating account details ${error}`,
+    });
+  }
+};
+
 module.exports = {
   registerNewUser,
   verifyOTP,
@@ -433,4 +467,5 @@ module.exports = {
   studentAuthentication,
   logoutUser,
   uploadProfileImage,
+  updateUserDetails,
 };

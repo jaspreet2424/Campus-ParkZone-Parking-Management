@@ -1,14 +1,30 @@
 import React from "react";
 import GuardNavbar from "./GuardNavbar";
+import { Link } from "react-router-dom";
+import GuardFooter from "./GuardFooter";
 // import './Guard.css'
 
 function Dashboard() {
-  
+  const cards = [
+    {
+      id: 1,
+      title: "View Student Details",
+      icon: "fa-regular fa-user",
+      link : '/guard/students-list'
+    },
+    {
+      id: 2,
+      title: "Search Students",
+      icon: "fa-solid fa-magnifying-glass",
+      link : '/guard/search-filter'
+    },
+  ];
+
   return (
     <div>
       <GuardNavbar></GuardNavbar>
       <div className="introduction-section w-full h-fit">
-        <div className="upper-section flex flex-col items-center justify-center pt-12 gap-2">
+        <div className="upper-section flex flex-col items-center justify-center pt-32 gap-2">
           <h1 className="text-5xl text-slate-900 font-bold">
             GURU NANAK DEV ENGINEERING COLLEGE
           </h1>
@@ -37,6 +53,24 @@ function Dashboard() {
           </h1>
         </div>
       </div>
+
+      <div className="w-full mt-24 grid grid-col-2 grid-flow-col bg-white py-24">
+        {cards.map((item) => {
+          return (
+            <Link
+              className="w-80 bg-slate-100 text-slate-900 rounded-md transition-all duration-300 py-6 px-6 flex flex-col items-center mx-auto shadow-xl gap-6 hover:bg-slate-900 hover:text-white"
+              key={item.id}
+              to={item.link}
+            >
+              <span className="text-2xl font-semibold">
+                {item.title}
+              </span>
+              <i className={`${item.icon} text-6xl`}></i>
+            </Link>
+          );
+        })}
+      </div>
+      <GuardFooter/>
     </div>
   );
 }

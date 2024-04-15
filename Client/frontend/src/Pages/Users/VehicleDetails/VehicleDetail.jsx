@@ -3,13 +3,12 @@ import Loader from "../../../Components/Loader/Loader";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { UPLOAD_VEHICLE_DETAIL_FAILURE } from "../../../Redux/Constants/Student";
-import {uploadVehicleDetails } from "../../../Redux/Actions/Student";
+import { uploadVehicleDetails } from "../../../Redux/Actions/Student";
 import { toast, Toaster } from "sonner";
 
 function VehicleDetail() {
   const [vehicleData, setvehicleData] = useState({
-    // CRN: localStorage.getItem("CRN"),
-    CRN: 2015064,
+    CRN: localStorage.getItem("CRN"),
     vehicleType: "",
     RCNumber: "",
     numberPlate: "",
@@ -142,13 +141,7 @@ function VehicleDetail() {
           <div className="w-full bg-slate-600" style={{ height: "2px" }}></div>
 
           <button className="px-4 py-1 text-lg bg-slate-900 text-white rounded-sm hover:bg-slate-700">
-          {isLoading ? (
-              <div className="flex justify-center items-center">
-                <Loader></Loader>
-              </div>
-            ) : (
-              <span>Proceed</span>
-            )}
+            {isLoading ? <span>Loading....</span> : <span>Proceed</span>}
           </button>
         </form>
         <div className="flex justify-center">
